@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Styles untuk slide */
+      .slide {
+        display: none;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Tampilkan slide pertama */
+      #slide1 {
+        display: block;
+      }
+
+      /* Styling tambahan */
+      #prev, #next {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="slide1" class="slide">
+      <h1>Slide 1</h1>
+      <img height="600px" src="img/Slide1.PNG"/>  
+    </div>
+    <div id="slide2" class="slide">
+      <h1>Slide 2</h1>
+      
+      <img id="image" src="img/C2,2.png">
+<canvas id="canvas"></canvas>
+
+<script>
+  var image = document.getElementById('image');
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+  
+  image.onload = function() {
+    canvas.width = image.width;
+    canvas.height = image.height;
+    ctx.drawImage(image, 0, 0);
+    
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var data = imageData.data;
+    
+    // Initialize frequency arrays for R, G, and B
+    var r = new Array(256).fill(0);
+    var g = new Array(256).fill(0);
+    var b = new Array(256).fill(0);
+    
+    // Iterate through pixel data and count the frequency of each color component
+    for (var i = 0; i < data.length; i += 4) {
+      r[data[i]]++;
+      g[data[i + 1]]++;
+      b[data[i + 2]]++;
+    }
+    // Draw the frequency diagrams for R, G, and B
+    var max = Math.max(...r, ...g, ...b);
+    var width = canvas.width / 256;
+    var height = canvas.height / 2;
+    ctx.fillStyle = 'red';
+    for (var i = 0; i < 256; i++) {
+      ctx.fillRect(i*width, canvas.height - (r[i]/max)*height , width, (r[i]/max)*height);
+    }
+    ctx.fillStyle = 'green';
+    for (var i = 0; i < 256; i++) {
+      ctx.fillRect(i*width, canvas.height - (g[i]/max)*height , width, (g[i]/max)*height);
+    }
+    ctx.fillStyle = 'blue';
+    for (var i = 0; i < 256; i++) {
+      ctx.fillRect(i*width, canvas.height - (b[i]/max)*height , width, (b[i]/max)*height);
+    }
+  };
+</script>
+      
+    </div>
+    <div id="slide3" class="slide">
+      <h1>Slide 3</h1>
+      <p>Ini adalah slide ketiga dari presentasi ini</p>
+    </div>
+    <button id="prev">Previous</button>
+    <button id="next">Next</button>
+
+    <script>
+      let currentSlide = 1;
+
+      document.getElementById("prev").addEventListener("click", function() {
+        document.getElementById("slide" + currentSlide).style.display = "none";
+        currentSlide--;
+        if (currentSlide < 1) {
+          currentSlide = 3;
+        }
+        document.getElementById("slide" + currentSlide).style.display = "block";
+      });
+
+      document.getElementById("next").addEventListener("click", function() {
+        document.getElementById("slide" + currentSlide).style.display = "none";
+        currentSlide++;
+        if (currentSlide > 3) {
+          currentSlide = 1;
+        }
+        document.getElementById("slide" + currentSlide).style.display = "block";
+      });
+    </script>
+  </body>
+</html>
